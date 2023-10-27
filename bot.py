@@ -27,9 +27,8 @@ YT_LINK       = 'https://www.youtube.com/@kolkhis.'
 es_bot = commands.Bot.from_client_credentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 esclient = eventsub.EventSubClient(es_bot, webhook_secret=WH_SEC, callback_route=CUR_DOMAIN)
 
-# [x] Before subscribing to events, you must create a callback that listens for events
-# [x] Your callback must use SSL and listen on port 443.
-
+# To get user badges:
+# usr_badges = message.author._badges  # Returns a string: moderator/1 (type/id)
 
 class ChatBot(commands.Bot):
     """SIQ BOT"""
@@ -67,10 +66,8 @@ class ChatBot(commands.Bot):
     # TODO: Could use this return to make my own chat overlay >>>
     async def event_message(self, message):
         if message.echo:  # If it's a bot message
-            return
-        # usr_badges = message.author._badges  # Returns a string: moderator/1 (type/id)
-        #  print("\033[31;1;4m Hello \033[0m")
-        if message.author.is_broadcaster:
+            print(f"\x1b[36m/bot/{BOT_NICK}\x1b[0m: {message.content}")
+        elif message.author.is_broadcaster:
             print(f"\x1b[31m/root/{message.author.display_name}\x1b[0m: {message.content}")
         elif message.author.is_mod:
             print(f'\x1b[32m/mod/{message.author.display_name}\x1b[0m: {message.content}')
@@ -120,7 +117,7 @@ class ChatBot(commands.Bot):
 
     @commands.command(name='twitter', aliases=('twt',))
     async def twitter(self, ctx:commands.Context):
-        await ctx.send('Twitter: sux')
+        await ctx.send('Twitter sux')
 
     # @commands.command(name='instagram', aliases=('ig', 'insta'))
     # async def instagram(self, ctx:commands.Context):
@@ -130,17 +127,24 @@ class ChatBot(commands.Bot):
     async def youtube(self, ctx:commands.Context):
         await ctx.send(f'No videos (yet), but my YouTube is: {YT_LINK}')
 
-    @commands.command(name='lurk', aliases=('afk',))
+    @commands.command(name='lurk', aliases=('afk', 'brb'))
     async def lurk(self, ctx:commands.Context):
         await ctx.send(f'{ctx.author.display_name} sits in the corner.')
 
-    @commands.command(name='twerkwhilelurk', aliases=('tww', 'twerklurk'))
+    @commands.command(name='twerkwhilelurk', aliases=('tww', 'twerklurk', 'lurktwerk'))
     async def lurktwerk(self, ctx:commands.Command):
         await ctx.send(f'{ctx.author.display_name} sits in the corner, twerking.')
 
+    # Mod Commands
+    @commands.command(name='clear', aliases=('cls', 'wipe', 'clearscreen'))
+    async def clear(self, ctx:commands.Command):
+        if ctx.author.is_mod or ctx.author.is_broadcaster:
+            await ctx.send('/clear')
+
+
 @es_bot.event()
 async def event_eventsub_notification_followV2(payload: eventsub.ChannelFollowData):
-    print(f'Received a notification for follow. Payload received:\n{payload=}')
+    # print(f'Received a notification for follow. Payload received:\n{payload}')
     channel = bot.get_channel('kolkhis')
     if channel:
         await channel.send(f"{payload.user.name} followed! Thanks!")
@@ -148,9 +152,11 @@ async def event_eventsub_notification_followV2(payload: eventsub.ChannelFollowDa
 @es_bot.event()
 async def event_eventsub_notification_stream_end(event: eventsub.StreamOfflineData):
     print(f"End of stream!")
-    ch = bot.get_channel(event.broadcaster.name)
+    ch = bot.get_channel('kolkhis')
     if ch:
         await ch.send(f"That's it for today! Thanks for hanging out! If you want to support the stream, you can! {KOFI_LINK}")
+
+# TODO: EventSub subscript to stream_start, Use twitter API to tweet when going live.
 
 # twitchio.ext.eventsub.event_eventsub_notification_raid(event: Channel)
 # subscribe_channel_shoutout_create(broadcaster: Union[PartialUser, str, int], moderator: Union[PartialUser, str, int])
@@ -158,7 +164,7 @@ async def event_eventsub_notification_stream_end(event: eventsub.StreamOfflineDa
 # Routines
 @routines.routine(minutes=15)
 async def support():
-    bot.get_channel('kolkhis').send(f'If you want to support my work, you can here: {KOFI_LINK}')
+    await bot.get_channel('kolkhis').send(f'If you want to support my work, you can here: {KOFI_LINK}')
 
 
 bot = ChatBot()
