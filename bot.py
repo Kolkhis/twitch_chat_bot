@@ -2,6 +2,8 @@ import os
 from twitchio.errors import HTTPException
 from twitchio.ext import commands, eventsub
 
+# FORGIVE THE MESS.
+
 # Constants for ChatBot
 TMI_TOKEN     = os.environ['TMI_TOKEN']
 CLIENT_ID     = os.environ['CLIENT_ID']
@@ -23,6 +25,7 @@ KOFI_LINK     = 'https://www.ko-fi.com/kolkhis'
 es_bot = commands.Bot.from_client_credentials(client_id=CLIENT_ID, client_secret=WH_SEC)
 esclient = eventsub.EventSubClient(es_bot, webhook_secret=CLIENT_SECRET, callback_route=DOMAIN_NAME)
 
+
 # [x] Before subscribing to events, you must create a callback that listens for events
 # [x] Your callback must use SSL and listen on port 443.
 
@@ -43,7 +46,7 @@ class ChatBot(commands.Bot):
     async def __ainit__(self) -> None:
         self.loop.create_task(esclient.listen(port=9091))
         try:
-            es_response = await esclient.subscribe_channel_follows_v2(broadcaster="109361217", moderator="109361217")
+            es_response = await esclient.subscribe_channel_follows_v2(broadcaster="109361217", moderator="109361217")  # Have also tried using integers for the IDs.
             print(f"All things in es_response list:\n{','.join(es_response)}")
         except HTTPException as e:
             print(f"HTTP Exception encountered \n{e.message}\n{e.reason}\n{e.status}\n{e.args}")
@@ -61,7 +64,7 @@ class ChatBot(commands.Bot):
     async def event_message(self, message):
         if message.echo:  # If it's a bot message
             return
-        print(message.content)
+        print(f"{message.author.name}: {message.content}")
         await self.handle_commands(message=message)
 
     @commands.command()
@@ -77,7 +80,6 @@ class ChatBot(commands.Bot):
     async def github(self, ctx: commands.Context):
         await ctx.send(f"I don't have a ton of public repos yet, but here's my " \
                        f"GitHub link: {GH_LINK}")
-        #  @{ctx.author.name}
 
     @commands.command()
     async def donate(self, ctx: commands.Context):
