@@ -1,0 +1,80 @@
+tiktok > inspect > Application > sessionid (under cookies?)
+https://api.streamelements.com/kappa/v2/speech?voice=en-AU-Standard-A&text=hello+there+friend
+
+Japanese:
+Eichi
+Haruto
+Eiko
+Miho
+Koharu
+Mizuki
+Takumi
+
+American English:
+Salli
+Mathhew
+Kimberly
+Kendra
+Justin
+Joey
+Ivy
+Carter
+Paul
+Evelyn
+Liam
+Jasmine
+Madison
+Mark
+Vanessa
+Zachary
+Audrey
+
+British English:
+Emma
+Brian
+Amy
+Layla
+Ali
+Scarlett
+Oliver
+Bella
+John
+Victoria
+Ron
+
+Australian English:
+Russell
+Nicole
+Zoe
+Luke
+Samantha
+Steve
+Courtney
+Jayden
+Ashleigh
+Daniel
+
+French:
+Yvonne
+Gaspard
+Emilie
+Marcel
+Brigitte
+Simon
+
+Indian English:
+Raveena
+Aditi
+
+English (India):
+Anushri
+Sundar
+Satya
+
+English (Canada):
+Linda
+Heather
+
+English (Ireland):
+Sean
+
