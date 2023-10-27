@@ -35,6 +35,7 @@ class ChatBot(commands.Bot):
     def __init__(self):
         super().__init__(token=TMI_TOKEN, prefix=BOT_PREFIX, initial_channels=CHANNELS,
                          nick=BOT_NICK)
+        self.mod_list = ['kolkhis', 'iFlipsy']
 
     async def __ainit__(self) -> None:
         self.loop.create_task(esclient.listen(port=9999))
@@ -138,7 +139,7 @@ class ChatBot(commands.Bot):
     # Mod Commands
     @commands.command(name='clear', aliases=('cls', 'wipe', 'clearscreen'))
     async def clear(self, ctx:commands.Command):
-        if ctx.author.is_mod or ctx.author.is_broadcaster:
+        if ctx.name in self.mod_list:
             await ctx.send('/clear')
 
 
