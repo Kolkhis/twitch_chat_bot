@@ -104,13 +104,14 @@ class ChatBot(commands.Bot):
         cmds = "!" + ", !".join(list(self.commands.keys()))
         await ctx.send(f"Available commands: {cmds}")
 
-    @commands.command(name='so', aliases=('shoutout',))
-    async def so(self, ctx:commands.Context):
-        msg = ctx.message.content
-        name = msg.split()[1]  # This works.
-        if ctx.author.is_mod or ctx.author.is_broadcaster:
-            # print(f"{ctx.author.display_name} initiated a shoutout command for {name}")
-            ctx.send(f'/shoutout {name}')  # This doesn't
+    # @commands.command(name='so', aliases=('shoutout',))
+    # async def so(self, ctx:commands.Context):
+    #     msg = ctx.message.content
+    #     if msg:
+    #         name = msg.split()[1]  # This works.
+    #     if ctx.author.is_mod or ctx.author.is_broadcaster:
+    #         # print(f"{ctx.author.display_name} initiated a shoutout command for {name}")
+    #         ctx.send(f'/shoutout {name}')  # This doesn't
 
     @commands.command(name='five', aliases=('5',))
     async def five(self, ctx:commands.Context):
